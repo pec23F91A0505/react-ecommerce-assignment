@@ -1,35 +1,70 @@
 
 import { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+} from "react-router-dom";
+
 import Navbar from "./components/Navbar";
-import ProductCard from "./components/ProductCard";
-import products from "./data/products";
+import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
 import "./App.css";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   const [cartCount, setCartCount] = useState(0);
 
-  function handleAddToCart(product) {
-    setCartCount((count) => count + 1);
+  function handleAddToCart(product, quantity = 1) {
+    setCartCount((count) => count + quantity);
     alert(product.name + " added to cart!");
   }
 
   return (
-    <div>
-      <Navbar />
-      <h1 className="page-title">Our Products</h1>
+    <BrowserRouter>
+      <Navbar cartCount={cartCount} />
 
-      <p className="cart-count">Cart Items: {cartCount}</p>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Products
+              onAddToCart={handleAddToCart}
+            />
+          }
+        />
 
-      <div className="product-container">
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            onAddToCart={handleAddToCart}
-          />
-        ))}
-      </div>
-    </div>
+        <Route
+          path="/products"
+          element={
+            <Products
+              onAddToCart={handleAddToCart}
+            />
+          }
+        />
+
+        <Route
+          path="/products/:id"
+          element={
+            <ProductDetails
+              onAddToCart={handleAddToCart}
+            />
+          }
+        />
+
+        <Route
+          path="/cart"
+          element={<h1>Shopping Cart</h1>}
+        />
+        <Route path="/login" 
+        element={<Login />}
+         />
+        <Route path="/register"
+         element={<Register />} 
+         />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
